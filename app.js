@@ -28,7 +28,7 @@ var uiController = (function() {
 
 // Sanhuutei ajillah controller
 var financeController = (function() {
-
+    // private
     var Income = function(id, description, value) {
         this.id = id;
         this.description = description;
@@ -42,7 +42,7 @@ var financeController = (function() {
     };
 
     var data = {
-        allItems: {
+        items: {
             inc: [],
             exp: []
         },
@@ -53,7 +53,32 @@ var financeController = (function() {
         }
     };
 
-    
+    return {
+        addItem: function(type, desc, val) {
+            var item;
+            var id;
+            // 
+
+            if(data.items[type].length === 0) {
+                id = 1;
+            }
+            else {
+                id = data.items[type][data.items[type].length - 1].id + 1;
+            }
+
+            if (type === "inc") {
+                item = new Income(id, desc, val);
+            } else {
+                // type === "exp"
+                item = new Expense(id, desc, val);
+            }
+            data.items[type].push(item);
+        },
+        seeData: function() {
+            return data;
+        }
+    };
+
 })();
 
 
@@ -62,10 +87,11 @@ var appController = (function(uiController, fnController) {
     
     var ctrlAddItem = function() {
         // oruulah ugudliig delgetsnees olj avna.
+        var input = uiController.getInput();
 
-        console.log(uiController.getInput());
         // olj avsan ugugdluu sanhuugiin controllert damjuulj hadgalna.
 
+        financeController.addItem(input.type, input.description, input.value);
         // olj avsan ugugdluudiig web deeree tohiroh hesegt gargana
 
         // tusuviig tootsoolno
